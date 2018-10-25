@@ -118,3 +118,7 @@ venv.bak/
 # Filenames with Special Characters #
 **/*[\\/\:;*?!'"<>|$º•¶§∞¢£]*
 
+# Input/Output
+input.txt
+output.txt
+
