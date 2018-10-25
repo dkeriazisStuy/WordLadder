@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import sys
+import heapq
 
 
 def read_file(filename):
@@ -37,6 +38,11 @@ def get_neighbors_dict(length):
     for word in words:
         neighbors_dict[word] = get_neighbors(words, word)
     return neighbors_dict
+
+
+def get_path(neighbors, start, dist_node):
+    frontier = {}
+    explored = {}
 
 
 def main():
