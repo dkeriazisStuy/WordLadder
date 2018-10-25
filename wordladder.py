@@ -1,19 +1,24 @@
 #!/usr/bin/python3
 import sys
 
+
 def read_file(filename):
     with open(filename) as f:
         return f.read()
+
 
 def write_file(filename, text):
     with open(filename, 'w') as f:
         f.write(text)
 
+
 def get_words():
     return read_file('dictall.txt').split('\n')
 
+
 def remove_letter(word, i):
     return word[:i] + word[i+1:]
+
 
 def get_neighbors(words, check_word):
     neighbors = set()
@@ -25,12 +30,14 @@ def get_neighbors(words, check_word):
                 neighbors.add(mod_word)
     return neighbors
 
+
 def get_neighbors_dict(length):
     neighbors_dict = {}
     words = set(word for word in get_words() if len(word) == length)
     for word in words:
         neighbors_dict[word] = get_neighbors(words, word)
     return neighbors_dict
+
 
 def main():
     _, in_file, out_file = sys.argv
@@ -41,6 +48,7 @@ def main():
         length = len(neighbors[word])
         result += '{word},{length}\n'.format(word=word, length=length)
     write_file(out_file, result)
+
 
 if __name__ == "__main__":
     main()
