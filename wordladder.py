@@ -56,11 +56,18 @@ class Node:
     def __lt__(self, n):
         return self.cost < n.cost
 
-    def neighbor(self, val):
-        cost = self.cost + 1
-        path = path.append(val)
-        node = Node(val, cost, path)
-        return node
+
+def char_difference(a, b):
+    """
+    Return the number of different characters between strings `a` and `b`
+    This requires `a` and `b` to be the same length
+    """
+    count = 0
+    for i, c in enumerate(a):
+        if b[i] != c:
+            count += 1
+    return count
+
 
 
 def get_path(neighbors_dict, start, end):
@@ -82,8 +89,12 @@ def get_path(neighbors_dict, start, end):
         neighbors = neighbors_dict[cur_node.val]
         for neighbor in neighbors:
             if neighbor not in explored:
+                # Get cost so far
+                cost = cur_node.cost + 1
+                # Add in optimistic distance until target
+                cost += char_difference(neighbor, end)
                 n = Node(neighbor,
-                        cur_node.cost + 1,
+                        cost,
                         cur_node.path + [cur_node.val])
                 heapq.heappush(frontier, n)
         # Push into explored
