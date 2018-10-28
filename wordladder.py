@@ -40,19 +40,70 @@ def get_neighbors_dict(length):
     return neighbors_dict
 
 
-def get_path(neighbors, start, dist_node):
-    frontier = {}
-    explored = {}
+class Node:
+    def __init__(self, val, cost, path):
+        self.val = val
+        self.cost = cost
+        self.path = path
+
+    def __repr__(self):
+        return '({val};{cost};{path_str})'.format(
+            val=self.val,
+            cost=self.cost,
+            path_str=','.join(self.path)
+        )
+
+    def __lt__(self, n):
+        return self.cost < n.cost
+
+    def neighbor(self, val):
+        cost = self.cost + 1
+        path = path.append(val)
+        node = Node(val, cost, path)
+        return node
+
+
+def get_path(neighbors_dict, start, end):
+    # Setup
+    frontier = []
+    explored = set()
+    heapq.heappush(frontier, Node(start, 0, []))
+    # Begin search
+    while True:
+        # If frontier is empty, give up
+        if frontier == []:
+            return None
+        # Pop from frontier
+        cur_node = heapq.heappop(frontier)
+        # Check if current node is target
+        if cur_node.val == end:
+            return cur_node.path + [cur_node.val]
+        # Neighbors into frontier
+        neighbors = neighbors_dict[cur_node.val]
+        for neighbor in neighbors:
+            if neighbor not in explored:
+                n = Node(neighbor,
+                        cur_node.cost + 1,
+                        cur_node.path + [cur_node.val])
+                heapq.heappush(frontier, n)
+        # Push into explored
+        explored.add(cur_node.val)
 
 
 def main():
     _, in_file, out_file = sys.argv
     words = read_file(in_file).strip().split('\n')
-    neighbors = get_neighbors_dict(len(words[0]))
+    length = len(words[0].split(',')[0])
+    paths = ((word.split(',')[0], word.split(',')[1]) for word in words)
+    neighbors = get_neighbors_dict(length)
     result = ''
-    for word in words:
-        length = len(neighbors[word])
-        result += '{word},{length}\n'.format(word=word, length=length)
+    for start, end in paths:
+        print(start, end)
+        path = get_path(neighbors, start, end)
+        if path is None:
+            path = [start, end]
+        print(path)
+        result += '{path_str}\n'.format(path_str=','.join(path))
     write_file(out_file, result)
 
 
