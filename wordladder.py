@@ -98,11 +98,11 @@ def main():
     neighbors = get_neighbors_dict(length)
     result = ''
     for start, end in paths:
-        print(start, end)
+        #  print(start, end)
         path = get_path(neighbors, start, end)
         if path is None:
             path = [start, end]
-        print(path)
+        #  print(path)
         result += '{path_str}\n'.format(path_str=','.join(path))
     write_file(out_file, result)
 
